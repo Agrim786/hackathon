@@ -82,7 +82,9 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
         throw new Error('Failed to fetch climate insights');
       }
       
-      return response.json();
+      const data = await response.json();
+      console.log("Insights API parsed data:", data);
+      return data;
     },
     staleTime: 30 * 60 * 1000, // 30 minutes
   });

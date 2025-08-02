@@ -20,8 +20,10 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
-      
-      return response.json();
+
+      const data = await response.json();
+      console.log("Weather API parsed data (RiskCards):", data);
+      return data;
     },
   });
 
@@ -29,7 +31,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     console.log("Backend URL:", import.meta.env.VITE_URL);
   }, []);
 
-  
+
   if (isLoading) {
     return (
       <div>
@@ -60,7 +62,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
       </div>
     );
   }
-  
+
   // ✅ Add a guard to prevent undefined errors
   if (!data?.weather || !data?.risks) {
     return (
@@ -72,10 +74,10 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
       </div>
     );
   }
-  
+
   const risks = data.risks;
   const weather = data.weather;
-  
+
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
@@ -101,7 +103,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     {
       title: "Temperature",
       value: `${risks.temperature.value}°F`,
-      subtitle: `Feels like ${weather?.feelsLike ? Math.round(weather.feelsLike * 9/5 + 32) : risks.temperature.value}°F`,
+      subtitle: `Feels like ${weather?.feelsLike ? Math.round(weather.feelsLike * 9 / 5 + 32) : risks.temperature.value}°F`,
       risk: risks.temperature.risk,
       description: risks.temperature.description,
       icon: Thermometer,

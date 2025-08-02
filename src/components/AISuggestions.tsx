@@ -31,7 +31,9 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
-      return response.json();
+      const data = await response.json();
+      console.log("Weather API parsed data (AISuggestions):", data);
+      return data;
     },
   });
   
@@ -57,7 +59,9 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
         throw new Error("Failed to fetch AI suggestions");
       }
 
-      return response.json();
+      const data = await response.json();
+      console.log("AI Suggestions parsed data:", data);
+      return data;
     },
   });
 
