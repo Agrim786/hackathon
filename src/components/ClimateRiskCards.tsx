@@ -51,9 +51,22 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
       </div>
     );
   }
-
-  const { risks, weather } = data;
-
+  
+  // ✅ Add a guard to prevent undefined errors
+  if (!data?.weather || !data?.risks) {
+    return (
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Current Climate Risks</h2>
+        <div className="text-center py-8 text-gray-500">
+          Loading weather details...
+        </div>
+      </div>
+    );
+  }
+  
+  const risks = data.risks;
+  const weather = data.weather;
+  
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
