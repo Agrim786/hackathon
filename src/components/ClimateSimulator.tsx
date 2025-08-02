@@ -39,7 +39,7 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
 
   const runSimulation = async () => {
     console.log("Running simulation request to:", `${import.meta.env.VITE_URL}/api/simulate`);
-    if (!weatherData?.weather) {
+    if (!weatherData) {
       toast({
         title: "No weather data",
         description: "Please wait for weather data to load before running simulation.",
@@ -59,7 +59,7 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
             rainfallChange: rainfallChange[0],
           },
           profile,
-          weather: weatherData?.weather || {},
+          weather: weatherData || {},
         }),
       });
 

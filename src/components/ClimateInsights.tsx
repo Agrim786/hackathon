@@ -52,7 +52,7 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
       }
       const data = await response.json();
       console.log("Weather API parsed data (ClimateInsights):", data);
-      const currentWeather = weather || data?.weather || {};
+      const currentWeather = weather || data || {};
       return currentWeather;
     },
   });

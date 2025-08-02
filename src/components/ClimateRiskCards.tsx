@@ -64,7 +64,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
   }
 
   // ✅ Add a guard to prevent undefined errors
-  if (!data?.weather || !data?.risks) {
+  if (!data || !data.risks) {
     return (
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-6">Current Climate Risks</h2>
@@ -76,7 +76,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
   }
 
   const risks = data.risks;
-  const weather = data.weather;
+  const weather = data;
 
 
   const getRiskColor = (risk: string) => {
