@@ -64,7 +64,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
   }
 
 
-  if (!data || !data.risks) {
+  if (!data) { // ✅ Only guard for data
     return (
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-6">Current Climate Risks</h2>
@@ -75,7 +75,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     );
   }
 
-  const risks = data.risks;
+  const risks = data?.risks || {}; // ✅ Fallback if risks is missing
   const weather = data;
   const temperature = weather?.temperature ?? 0;
   const feelsLike = weather?.feelsLike ?? 0;
@@ -104,8 +104,8 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
   const cards = [
     {
       title: "Temperature",
-      value: `${risks?.temperature?.value ?? 0}°F`,
-      subtitle: `Feels like ${feelsLike}°F`,
+      value: `${weather?.temperature ?? 0}°F`, // ✅ fixed: should display temperature
+      subtitle: `Feels like ${weather?.feelsLike ?? 0}°F`,
       risk: risks?.temperature?.risk ?? "low",
       description: risks?.temperature?.description ?? "",
       icon: Thermometer,
@@ -113,32 +113,40 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     },
     {
       title: "Rain Forecast",
-      value: `${risks.rain.probability}%`,
+      value: `${risks?.rain?.probability ?? 0}%`,
       subtitle: "Next 3 hours",
-      risk: risks.rain.risk,
-      description: risks.rain.description,
+      risk: risks?.rain?.risk ?? "low",
+      description: risks?.rain?.description ?? "",
       icon: CloudRain,
       testId: "card-rain"
     },
     {
       title: "UV Index",
-      value: risks.uv.index.toString(),
-      subtitle: risks.uv.index > 8 ? "Very High" : risks.uv.index > 6 ? "High" : risks.uv.index > 3 ? "Moderate" : "Low",
-      risk: risks.uv.risk,
-      description: risks.uv.description,
+      value: `${risks?.uv?.index ?? 0}`,
+      subtitle:
+        risks?.uv?.index > 8
+          ? "Very High"
+          : risks?.uv?.index > 6
+          ? "High"
+          : risks?.uv?.index > 3
+          ? "Moderate"
+          : "Low",
+      risk: risks?.uv?.risk ?? "low",
+      description: risks?.uv?.description ?? "",
       icon: Sun,
       testId: "card-uv"
     },
     {
       title: "Air Quality",
-      value: risks.aqi.value.toString(),
+      value: risks?.aqi?.value?.toString() ?? "0",
       subtitle: "AQI Good",
-      risk: risks.aqi.risk,
-      description: risks.aqi.description,
+      risk: risks?.aqi?.risk ?? "low",
+      description: risks?.aqi?.description ?? "",
       icon: Wind,
       testId: "card-aqi"
     }
   ];
+  
 
   return (
     <div>
