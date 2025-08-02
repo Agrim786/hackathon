@@ -52,7 +52,8 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     );
   }
 
-  const { risks } = data;
+  const { risks, weather } = data;
+
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
