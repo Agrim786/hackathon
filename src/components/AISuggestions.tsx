@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Brain, RefreshCw, Lightbulb, Shield, Clock, Heart, Zap } from "lucide-react";
@@ -25,6 +25,7 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
     queryKey: ["/api/weather", latitude, longitude],
     enabled: !!(latitude && longitude),
     queryFn: async () => {
+      
       const response = await fetch(`${import.meta.env.VITE_URL}/api/weather?lat=${latitude}&lon=${longitude}`);
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
@@ -32,6 +33,10 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
       return response.json();
     },
   });
+  
+  useEffect(() => {
+    console.log("Backend URL:", import.meta.env.VITE_URL);
+  }, []);
   
 
   const { data: suggestions, isLoading, error } = useQuery({

@@ -10,6 +10,7 @@ import Privacy from "@/pages/privacy";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  console.log("Backend URL:", import.meta.env.VITE_URL);
   return (
     <Switch>
       <Route path="/" component={Dashboard} />

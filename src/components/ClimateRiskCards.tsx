@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Thermometer, CloudRain, Sun, Wind } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
 
 interface ClimateRiskCardsProps {
   latitude: number;
@@ -21,6 +22,11 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     },
   });
 
+  useEffect(() => {
+    console.log("Backend URL:", import.meta.env.VITE_URL);
+  }, []);
+
+  
   if (isLoading) {
     return (
       <div>
