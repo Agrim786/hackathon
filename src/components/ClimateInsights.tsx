@@ -49,11 +49,12 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
         throw new Error('Failed to fetch weather data');
       }
       const data = await response.json();
-      return data.weather;
+      const currentWeather = weather || data?.weather || {};
+      return currentWeather;
     },
   });
 
-  const currentWeather = weather || weatherData;
+  const currentWeather = weather || weatherData || {};
 
   const { data: insightsData, isLoading, error } = useQuery({
     queryKey: ['/api/climate/insights', location?.latitude, location?.longitude, currentWeather, userProfile],

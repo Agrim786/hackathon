@@ -79,7 +79,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     {
       title: "Temperature",
       value: `${risks.temperature.value}°F`,
-      subtitle: `Feels like ${data.weather.feelsLike > 0 ? Math.round(data.weather.feelsLike * 9/5 + 32) : risks.temperature.value}°F`,
+      subtitle: `Feels like ${weather?.feelsLike ? Math.round(weather.feelsLike * 9/5 + 32) : risks.temperature.value}°F`,
       risk: risks.temperature.risk,
       description: risks.temperature.description,
       icon: Thermometer,

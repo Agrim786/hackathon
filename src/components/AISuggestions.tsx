@@ -32,15 +32,16 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
       return response.json();
     },
   });
+  
 
   const { data: suggestions, isLoading, error } = useQuery({
-    queryKey: ["/api/ai/suggestions", profile, weatherData?.weather],
+    queryKey: ["/api/ai/suggestions", profile, weatherData?.weather || null],
     enabled: !!(weatherData?.weather && profile.age && profile.gender && profile.occupation),
     queryFn: async () => {
       const response = await fetch(`${import.meta.env.VITE_URL}/api/ai/suggestions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile, weather: weatherData.weather }),
+        body: JSON.stringify({ profile, weather: weatherData?.weather || {} }),
       });
       
 

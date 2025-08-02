@@ -57,7 +57,7 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
             rainfallChange: rainfallChange[0],
           },
           profile,
-          weather: weatherData.weather,
+          weather: weatherData?.weather || {},
         }),
       });
 
