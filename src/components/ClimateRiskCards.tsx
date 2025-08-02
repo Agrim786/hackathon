@@ -64,7 +64,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
   }
 
 
-  if (!data) {
+  if (!data || !data.risks) {
     return (
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-6">Current Climate Risks</h2>
@@ -104,10 +104,10 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
   const cards = [
     {
       title: "Temperature",
-      value: `${risks.temperature.value}°F`,
+      value: `${risks?.temperature?.value ?? 0}°F`,
       subtitle: `Feels like ${feelsLike}°F`,
-      risk: risks.temperature.risk,
-      description: risks.temperature.description,
+      risk: risks?.temperature?.risk ?? "low",
+      description: risks?.temperature?.description ?? "",
       icon: Thermometer,
       testId: "card-temperature"
     },
