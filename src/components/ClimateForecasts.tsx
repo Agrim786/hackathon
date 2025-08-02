@@ -17,6 +17,7 @@ export function ClimateForecasts({ latitude, longitude }: ClimateForecastsProps)
     queryKey: ["/api/forecast", latitude, longitude, selectedPeriod],
     enabled: !!(latitude && longitude),
     queryFn: async () => {
+      console.log("Fetching forecast from:", `${import.meta.env.VITE_URL}/api/forecast?lat=${latitude}&lon=${longitude}&period=${selectedPeriod}`);
       const response = await fetch(`${import.meta.env.VITE_URL}/api/forecast?lat=${latitude}&lon=${longitude}&period=${selectedPeriod}`);
       if (!response.ok) {
         throw new Error('Failed to fetch forecast data');
