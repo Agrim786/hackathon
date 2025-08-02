@@ -28,7 +28,7 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
     queryKey: ["/api/weather", latitude, longitude],
     enabled: !!(latitude && longitude),
     queryFn: async () => {
-      const response = await fetch(`/api/weather?lat=${latitude}&lon=${longitude}`);
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/weather?lat=${latitude}&lon=${longitude}`);
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
@@ -48,7 +48,7 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
 
     setIsSimulating(true);
     try {
-      const response = await fetch("/api/simulate", {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/simulate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

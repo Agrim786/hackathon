@@ -28,7 +28,7 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
     queryKey: ["/api/location"],
     enabled: true, // Auto-detect on component mount
     queryFn: async () => {
-      const response = await fetch("/api/location");
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/location`);
       if (!response.ok) {
         throw new Error('Failed to detect location');
       }
