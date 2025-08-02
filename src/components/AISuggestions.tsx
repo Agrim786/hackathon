@@ -27,6 +27,7 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
     queryFn: async () => {
       console.log("Fetching weather (AISuggestions) from:", `${import.meta.env.VITE_URL}/api/weather?lat=${latitude}&lon=${longitude}`);
       const response = await fetch(`${import.meta.env.VITE_URL}/api/weather?lat=${latitude}&lon=${longitude}`);
+      console.log("Weather API raw response (AISuggestions):", response);
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
@@ -49,6 +50,7 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile, weather: weatherData?.weather || {} }),
       });
+      console.log("AI Suggestions raw response:", response);
       
 
       if (!response.ok) {

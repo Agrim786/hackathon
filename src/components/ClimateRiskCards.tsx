@@ -16,9 +16,11 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     queryFn: async () => {
       console.log("Fetching weather (ClimateRiskCards) from:", `${import.meta.env.VITE_URL}/api/weather?lat=${latitude}&lon=${longitude}`);
       const response = await fetch(`${import.meta.env.VITE_URL}/api/weather?lat=${latitude}&lon=${longitude}`);
+      console.log("Weather API raw response (RiskCards):", response);
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
+      
       return response.json();
     },
   });

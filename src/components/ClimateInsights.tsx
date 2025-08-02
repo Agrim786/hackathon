@@ -46,10 +46,12 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
     queryFn: async () => {
       console.log("Fetching weather (ClimateInsights) from:", `${import.meta.env.VITE_URL}/api/weather?lat=${location?.latitude}&lon=${location?.longitude}`);
       const response = await fetch(`${import.meta.env.VITE_URL}/api/weather?lat=${location?.latitude}&lon=${location?.longitude}`);
+      console.log("Weather API raw response (ClimateInsights):", response);
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
       const data = await response.json();
+      console.log("Weather API parsed data (ClimateInsights):", data);
       const currentWeather = weather || data?.weather || {};
       return currentWeather;
     },
@@ -74,6 +76,7 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
           profile: userProfile
         }),
       });
+      console.log("Insights API raw response:", response);
       
       if (!response.ok) {
         throw new Error('Failed to fetch climate insights');
