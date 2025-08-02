@@ -63,8 +63,8 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     );
   }
 
-  // ✅ Add a guard to prevent undefined errors
-  if (!data || !data.risks) {
+  
+  if (!data) {
     return (
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-6">Current Climate Risks</h2>
