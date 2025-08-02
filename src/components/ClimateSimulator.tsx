@@ -50,7 +50,7 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
 
     setIsSimulating(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_URL}/api/simulate`, {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/climate/simulator`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
