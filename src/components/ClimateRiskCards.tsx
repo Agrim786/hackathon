@@ -63,7 +63,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     );
   }
 
-  
+
   if (!data) {
     return (
       <div>
@@ -77,6 +77,8 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
 
   const risks = data.risks;
   const weather = data;
+  const temperature = weather?.temperature ?? 0;
+  const feelsLike = weather?.feelsLike ?? 0;
 
 
   const getRiskColor = (risk: string) => {
@@ -103,7 +105,7 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
     {
       title: "Temperature",
       value: `${risks.temperature.value}°F`,
-      subtitle: `Feels like ${weather?.feelsLike ? Math.round(weather.feelsLike * 9 / 5 + 32) : risks.temperature.value}°F`,
+      subtitle: `Feels like ${feelsLike}°F`,
       risk: risks.temperature.risk,
       description: risks.temperature.description,
       icon: Thermometer,
