@@ -124,10 +124,7 @@ export default function About() {
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Our Team</h2>
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
             <p className="text-lg text-gray-600 text-center leading-relaxed">
-              ClimateAI is built by a passionate team of climate scientists, AI engineers, and environmental advocates 
-              who believe in the power of technology to address climate challenges. Our diverse backgrounds in 
-              meteorology, machine learning, and sustainable development drive our commitment to creating 
-              meaningful environmental solutions.
+            ClimateAI is built by a passionate team of AI engineers and environmental advocates who believe in the power of technology to tackle climate challenges. Our expertise in meteorology, machine learning, and sustainable development fuels our commitment to creating impactful environmental solutions.
             </p>
           </div>
         </section>

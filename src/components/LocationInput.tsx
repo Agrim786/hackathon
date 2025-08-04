@@ -21,12 +21,12 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
   const [inputValue, setInputValue] = useState("");
   const [detectedLocation, setDetectedLocation] = useState<string>("");
   const queryClient = useQueryClient();
-  const [suggestions, setSuggestions] = useState<Array<{city: string, country: string, lat: number, lon: number}>>([]);
+  const [suggestions, setSuggestions] = useState<Array<{ city: string, country: string, lat: number, lon: number }>>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const suggestionTimeoutRef = useRef<NodeJS.Timeout>();
   const { toast } = useToast();
-  
+
 
   const { data: autoLocation, refetch: detectLocation, isLoading: isDetecting } = useQuery({
     queryKey: ["/api/location"],
@@ -72,14 +72,14 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
 
   const fetchCitySuggestions = async (query: string) => {
     if (query.length < 2) return;
-    
+
     setIsLoadingSuggestions(true);
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1&type=city`
       );
       const data = await response.json();
-      
+
       const cityResults = data
         .filter((item: any) => item.type === 'city' || item.type === 'town' || item.type === 'administrative')
         .map((item: any) => ({
@@ -109,21 +109,21 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
       latitude: suggestion.lat,
       longitude: suggestion.lon,
     };
-  
+
     setInputValue(suggestion.display);
     setDetectedLocation(suggestion.display);
     setShowSuggestions(false);
     setSuggestions([]);
     onLocationChange(location);
-  
+
     // Save silently to localStorage
     localStorage.setItem("selectedLocation", JSON.stringify(location));
 
     // Invalidate queries so forecast refetches
     queryClient.invalidateQueries({ queryKey: ['/api/location'] });
     queryClient.invalidateQueries({ queryKey: ['/api/forecast'] });
-    
-    
+
+
     toast({
       title: "Location selected",
       description: `Location set to ${suggestion.display}`,
@@ -137,14 +137,23 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
           const { latitude, longitude } = position.coords;
           const response = await fetch(`${import.meta.env.VITE_URL}/api/location?lat=${latitude}&lon=${longitude}`);
           const data = await response.json();
-  
-          if (data && (data.city || data.country)) {  // allow detection even if only country exists
+
+          if (data && (data.city || data.country)) {
             setInputValue(`${data.city || data.region || 'Unknown'}, ${data.country}`);
             setDetectedLocation(`${data.city || data.region || 'Unknown'}, ${data.country}`);
             onLocationChange(data);
-            toast({ title: "Location detected", description: `Detected: ${data.city || data.region || 'Unknown'}, ${data.country}` });
-          } else {
-            toast({ title: "Detection failed", description: "Could not detect your location via API.", variant: "destructive" });
+
+            // ✅ Save to localStorage so forecast page can use it
+            localStorage.setItem("selectedLocation", JSON.stringify(data));
+
+            // ✅ Invalidate queries so forecast data refreshes
+            queryClient.invalidateQueries({ queryKey: ['/api/location'] });
+            queryClient.invalidateQueries({ queryKey: ['/api/forecast'] });
+
+            toast({
+              title: "Location detected",
+              description: `Detected: ${data.city || data.region || 'Unknown'}, ${data.country}`
+            });
           }
         }
       );
@@ -165,8 +174,8 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
       }
     }
   };
-  
-  
+
+
 
   const handleManualSearch = async () => {
     if (!inputValue.trim()) {
@@ -199,7 +208,7 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
 
       onLocationChange(location);
       setDetectedLocation(result.display_name);
-      
+
       toast({
         title: "Location found",
         description: `Location set to ${result.display_name}`,
@@ -242,7 +251,7 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
               >
                 <Search className="h-4 w-4 text-gray-400" />
               </Button>
-              
+
               {/* Suggestions dropdown */}
               {showSuggestions && suggestions.length > 0 && (
                 <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
