@@ -61,7 +61,7 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
 
   const { data: insightsData, isLoading, error } = useQuery({
     queryKey: ['/api/climate/insights', location?.latitude, location?.longitude, currentWeather, userProfile],
-    enabled: !!(location && currentWeather),
+    enabled: !!(location && (weather || weatherData)),
     queryFn: async () => {
       console.log("Fetching climate insights from:", `${import.meta.env.VITE_URL}/api/climate/insights`);
       const response = await fetch(`${import.meta.env.VITE_URL}/api/climate/insights`, {
@@ -72,7 +72,7 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
         body: JSON.stringify({
           location,
           weather: currentWeather,
-          profile: userProfile
+          userProfile
         }),
       });
       console.log("Insights API raw response:", response);
