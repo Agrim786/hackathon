@@ -54,8 +54,7 @@ export function Header() {
           
           {/* Desktop Navigation */}
           <NavigationMenu />
-          
-          {/* CTA Button */}
+{/*           
           <div className="hidden lg:flex items-center space-x-4">
             <Button 
               variant="outline" 
@@ -63,7 +62,7 @@ export function Header() {
             >
               Get Started
             </Button>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Button */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>

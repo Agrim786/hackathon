@@ -23,15 +23,21 @@ export function Footer() {
               Empowering communities with AI-driven climate insights and personalized environmental recommendations for a sustainable future.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              {/* <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </a> */}
+              <a
+                href="https://www.linkedin.com/in/agrim-mahajan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+
+              {/* <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Github className="h-5 w-5" />
-              </a>
+              </a> */}
             </div>
           </div>
 
@@ -49,11 +55,11 @@ export function Footer() {
                   Weather Forecast
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/simulator" className="text-gray-400 hover:text-white transition-colors">
                   Climate Simulator
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
                   About Us
@@ -71,7 +77,7 @@ export function Footer() {
                   Contact Us
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
@@ -85,7 +91,7 @@ export function Footer() {
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
                   Help Center
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -116,12 +122,12 @@ export function Footer() {
               © {currentYear} ClimateAI. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
+              {/* <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Privacy Policy
               </Link>
               <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Terms of Service
-              </Link>
+              </Link> */}
               <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Contact Us
               </Link>
