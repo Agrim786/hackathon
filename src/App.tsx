@@ -8,6 +8,8 @@ import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Privacy from "@/pages/privacy";
 import NotFound from "@/pages/not-found";
+import ScrollToTop from "./components/ScrollToTop";
+
 
 function Router() {
   console.log("Backend URL:", import.meta.env.VITE_URL);
@@ -28,6 +30,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
+        <ScrollToTop />
         <Router />
       </TooltipProvider>
     </QueryClientProvider>
