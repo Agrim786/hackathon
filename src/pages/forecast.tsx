@@ -8,7 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Cloud, Sun, CloudRain, Wind, Thermometer, Droplets } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 type LocationData = {
     city: string;
@@ -22,8 +23,11 @@ type LocationData = {
 
 export default function Forecast() {
     const [forecastPeriod, setForecastPeriod] = useState<'daily' | 'weekly' | 'monthly' | 'yearly'>('daily');
+    const queryClient = useQueryClient();
     const storedLocation = localStorage.getItem("selectedLocation");
     const parsedLocation = storedLocation ? JSON.parse(storedLocation) : null;
+
+    
 
     // Get user location
     const { data: location = parsedLocation || { city: '', region: '', country: '', latitude: 0, longitude: 0, timezone: '' } }
@@ -42,6 +46,15 @@ export default function Forecast() {
             },
             staleTime: 30 * 60 * 1000,
         });
+        useEffect(() => {
+            const handleStorageChange = () => {
+                queryClient.invalidateQueries({ queryKey: ['/api/location'] });
+                queryClient.invalidateQueries({ queryKey: ['/api/forecast'] });                
+            };
+          
+            window.addEventListener('storage', handleStorageChange);
+            return () => window.removeEventListener('storage', handleStorageChange);
+          }, [queryClient]);
 
 
     return (

@@ -6,7 +6,7 @@ import { Search, MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-
+import { useQueryClient } from '@tanstack/react-query';
 
 interface LocationInputProps {
   onLocationChange: (location: {
@@ -20,6 +20,7 @@ interface LocationInputProps {
 export function LocationInput({ onLocationChange }: LocationInputProps) {
   const [inputValue, setInputValue] = useState("");
   const [detectedLocation, setDetectedLocation] = useState<string>("");
+  const queryClient = useQueryClient();
   const [suggestions, setSuggestions] = useState<Array<{city: string, country: string, lat: number, lon: number}>>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
@@ -117,7 +118,12 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
   
     // Save silently to localStorage
     localStorage.setItem("selectedLocation", JSON.stringify(location));
-  
+
+    // Invalidate queries so forecast refetches
+    queryClient.invalidateQueries({ queryKey: ['/api/location'] });
+    queryClient.invalidateQueries({ queryKey: ['/api/forecast'] });
+    
+    
     toast({
       title: "Location selected",
       description: `Location set to ${suggestion.display}`,
