@@ -11,7 +11,7 @@ export function Header() {
   const navigationItems = [
     { href: "/", label: "Dashboard" },
     { href: "/forecast", label: "Forecast" },
-    { href: "/simulator", label: "Climate Simulator" },
+    // { href: "/simulator", label: "Climate Simulator" },
     { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" },
   ];
