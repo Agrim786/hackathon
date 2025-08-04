@@ -70,8 +70,7 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          lat: location?.latitude,
-          lon: location?.longitude,
+          location,
           weather: currentWeather,
           profile: userProfile
         }),
@@ -126,7 +125,7 @@ export function ClimateInsights({ location, weather, userProfile }: ClimateInsig
     }
   };
 
-  if (!location || !weather) {
+  if (!location) {
     return (
       <Card>
         <CardHeader>
