@@ -26,7 +26,7 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
 
   const { data: autoLocation, refetch: detectLocation, isLoading: isDetecting } = useQuery({
     queryKey: ["/api/location"],
-    enabled: true, // Auto-detect on component mount
+    enabled: false, // Auto-detect on component mount
     queryFn: async () => {
       const response = await fetch(`${import.meta.env.VITE_URL}/api/location`);
       if (!response.ok) {
@@ -120,19 +120,28 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
 
   const handleAutoDetect = async () => {
     try {
-      await detectLocation();
+      const result = await detectLocation();
+      if (result.data && result.data.city) {
+        toast({
+          title: "Location detected",
+          description: `Detected: ${result.data.city}, ${result.data.country}`,
+        });
+      } else {
+        toast({
+          title: "Detection failed",
+          description: "Could not detect your location. Please enter it manually.",
+          variant: "destructive",
+        });
+      }
+    } catch {
       toast({
-        title: "Location detected",
-        description: "Your location has been automatically detected.",
-      });
-    } catch (error) {
-      toast({
-        title: "Location detection failed",
-        description: "Unable to detect your location. Please enter it manually.",
+        title: "Detection failed",
+        description: "Could not detect your location. Please enter it manually.",
         variant: "destructive",
       });
     }
   };
+  
 
   const handleManualSearch = async () => {
     if (!inputValue.trim()) {
