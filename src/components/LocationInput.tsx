@@ -134,47 +134,102 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          const { latitude, longitude } = position.coords;
-          const response = await fetch(`${import.meta.env.VITE_URL}/api/location?lat=${latitude}&lon=${longitude}`);
-          const data = await response.json();
-
-          if (data && (data.city || data.country)) {
-            setInputValue(`${data.city || data.region || 'Unknown'}, ${data.country}`);
-            setDetectedLocation(`${data.city || data.region || 'Unknown'}, ${data.country}`);
-            onLocationChange(data);
-
-            // ✅ Save to localStorage so forecast page can use it
-            localStorage.setItem("selectedLocation", JSON.stringify(data));
-
-            // ✅ Invalidate queries so forecast data refreshes
-            queryClient.invalidateQueries({ queryKey: ['/api/location'] });
-            queryClient.invalidateQueries({ queryKey: ['/api/forecast'] });
-
+          try {
+            const { latitude, longitude } = position.coords;
+            const response = await fetch(`${import.meta.env.VITE_URL}/api/location?lat=${latitude}&lon=${longitude}`);
+            if (!response.ok) throw new Error("Failed to detect location");
+  
+            const data = await response.json();
+  
+            if (data && (data.city || data.country)) {
+              setInputValue(`${data.city || data.region || "Unknown"}, ${data.country}`);
+              setDetectedLocation(`${data.city || data.region || "Unknown"}, ${data.country}`);
+              onLocationChange(data);
+  
+              // ✅ Save to localStorage so forecast page can use it
+              localStorage.setItem("selectedLocation", JSON.stringify(data));
+  
+              // ✅ Invalidate queries so forecast data refreshes
+              queryClient.invalidateQueries({ queryKey: ["/api/location"] });
+              queryClient.invalidateQueries({ queryKey: ["/api/forecast"] });
+  
+              toast({
+                title: "Location detected",
+                description: `Detected: ${data.city || data.region || "Unknown"}, ${data.country}`,
+              });
+            } else {
+              throw new Error("Incomplete location data");
+            }
+          } catch (err) {
             toast({
-              title: "Location detected",
-              description: `Detected: ${data.city || data.region || 'Unknown'}, ${data.country}`
+              title: "Detection failed",
+              description: "Could not detect your location via GPS. Falling back to IP-based detection.",
+              variant: "destructive",
+            });
+  
+            // ✅ Fallback to IP detection
+            const result = await detectLocation();
+            if (result.data && (result.data.city || result.data.country)) {
+              localStorage.setItem("selectedLocation", JSON.stringify(result.data));
+              queryClient.invalidateQueries({ queryKey: ["/api/location"] });
+              queryClient.invalidateQueries({ queryKey: ["/api/forecast"] });
+  
+              setInputValue(`${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`);
+              setDetectedLocation(`${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`);
+              onLocationChange(result.data);
+  
+              toast({
+                title: "Location detected (IP)",
+                description: `Detected: ${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`,
+              });
+            }
+          }
+        },
+        async () => {
+          // Geolocation permission denied → fallback to IP detection
+          toast({
+            title: "GPS permission denied",
+            description: "Using IP-based detection instead.",
+            variant: "destructive",
+          });
+  
+          const result = await detectLocation();
+          if (result.data && (result.data.city || result.data.country)) {
+            localStorage.setItem("selectedLocation", JSON.stringify(result.data));
+            queryClient.invalidateQueries({ queryKey: ["/api/location"] });
+            queryClient.invalidateQueries({ queryKey: ["/api/forecast"] });
+  
+            setInputValue(`${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`);
+            setDetectedLocation(`${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`);
+            onLocationChange(result.data);
+  
+            toast({
+              title: "Location detected (IP)",
+              description: `Detected: ${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`,
             });
           }
         }
       );
     } else {
-      // fallback to IP detection
+      // Browser doesn't support geolocation → fallback to IP
       const result = await detectLocation();
-      if (result.data && result.data.city) {
+      if (result.data && (result.data.city || result.data.country)) {
+        localStorage.setItem("selectedLocation", JSON.stringify(result.data));
+        queryClient.invalidateQueries({ queryKey: ["/api/location"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/forecast"] });
+  
+        setInputValue(`${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`);
+        setDetectedLocation(`${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`);
+        onLocationChange(result.data);
+  
         toast({
           title: "Location detected (IP)",
-          description: `Detected: ${result.data.city}, ${result.data.country}`,
-        });
-      } else {
-        toast({
-          title: "Detection failed",
-          description: "Could not detect location.",
-          variant: "destructive",
+          description: `Detected: ${result.data.city || result.data.region || "Unknown"}, ${result.data.country}`,
         });
       }
     }
   };
-
+  
 
 
   const handleManualSearch = async () => {
