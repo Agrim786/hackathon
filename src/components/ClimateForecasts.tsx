@@ -35,17 +35,18 @@ export function ClimateForecasts({ latitude, longitude }: ClimateForecastsProps)
 
   const formatChartData = (data: any[]) => {
     if (!data) return [];
-    
+
     return data.map((item, index) => ({
-      name: selectedPeriod === 'daily' 
+      name: selectedPeriod === 'daily'
         ? new Date(item.date).toLocaleDateString('en-US', { weekday: 'short' })
         : selectedPeriod === 'weekly'
-        ? `Week ${index + 1}`
-        : selectedPeriod === 'monthly'
-        ? new Date(item.date).toLocaleDateString('en-US', { month: 'short' })
-        : new Date(item.date).getFullYear().toString(),
-      temperature: Math.round(item.temperature * 9/5 + 32), // Convert to Fahrenheit
-      original: item
+          ? `Week ${index + 1}`
+          : selectedPeriod === 'monthly'
+            ? new Date(item.date).toLocaleDateString('en-US', { month: 'short' })
+            : new Date(item.date).getFullYear().toString(),
+      tempMax: Math.round(item.tempMax),
+      tempMin: Math.round(item.tempMin),
+      original: item,
     }));
   };
 
@@ -62,11 +63,10 @@ export function ClimateForecasts({ latitude, longitude }: ClimateForecastsProps)
               key={period.value}
               variant={selectedPeriod === period.value ? "default" : "ghost"}
               size="sm"
-              className={`flex-1 text-sm font-medium ${
-                selectedPeriod === period.value 
-                  ? "bg-primary text-white" 
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`flex-1 text-sm font-medium ${selectedPeriod === period.value
+                ? "bg-primary text-white"
+                : "text-gray-600 hover:text-gray-900"
+                }`}
               onClick={() => setSelectedPeriod(period.value as any)}
               data-testid={`button-period-${period.value}`}
             >
@@ -93,27 +93,37 @@ export function ClimateForecasts({ latitude, longitude }: ClimateForecastsProps)
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={formatChartData(forecast.data)}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="name" 
+                <XAxis
+                  dataKey="name"
                   tick={{ fontSize: 12 }}
                   tickLine={{ stroke: '#e5e7eb' }}
                 />
-                <YAxis 
+                <YAxis
                   tick={{ fontSize: 12 }}
                   tickLine={{ stroke: '#e5e7eb' }}
-                  label={{ value: 'Temperature (°F)', angle: -90, position: 'insideLeft' }}
+                  label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }}
                 />
-                <Tooltip 
-                  formatter={(value: any, name: string) => [`${value}°F`, 'Temperature']}
+                <Tooltip
+                  formatter={(value: any, name: string) => [`${value}°C`, 'Temperature']}
                   labelFormatter={(label) => `${label}`}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="temperature" 
-                  stroke="#2563EB" 
+                <Line
+                  type="monotone"
+                  dataKey="tempMax"
+                  stroke="#2563EB"
+                  name="Max Temp"
                   strokeWidth={2}
                   dot={{ fill: '#2563EB', strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6, stroke: '#2563EB', strokeWidth: 2 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="tempMin"
+                  stroke="#60A5FA"
+                  name="Min Temp"
+                  strokeWidth={2}
+                  dot={{ fill: '#60A5FA', strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, stroke: '#60A5FA', strokeWidth: 2 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -129,19 +139,20 @@ export function ClimateForecasts({ latitude, longitude }: ClimateForecastsProps)
           <div className="bg-gray-50 rounded-lg p-4" data-testid="forecast-summary">
             <h4 className="font-medium text-gray-900 mb-2">
               {selectedPeriod === 'daily' ? 'Next 7 Days' :
-               selectedPeriod === 'weekly' ? 'Next 4 Weeks' :
-               selectedPeriod === 'monthly' ? 'Next 3 Months' :
-               'Next 5 Years'}
+                selectedPeriod === 'weekly' ? 'Next 4 Weeks' :
+                  selectedPeriod === 'monthly' ? 'Next 3 Months' :
+                    'Next 5 Years'}
             </h4>
             <p className="text-sm text-gray-600">
               {forecast.data && forecast.data.length > 0 ? (
-                `Temperature range: ${Math.min(...forecast.data.map((d: any) => Math.round(d.temperature * 9/5 + 32)))}°F to ${Math.max(...forecast.data.map((d: any) => Math.round(d.temperature * 9/5 + 32)))}°F. 
-                 ${selectedPeriod === 'daily' ? 'Plan outdoor activities during cooler periods.' :
-                   selectedPeriod === 'weekly' ? 'Consider seasonal clothing adjustments.' :
-                   selectedPeriod === 'monthly' ? 'Monitor long-term climate patterns.' :
-                   'Long-term climate trends for planning.'}`
+                `Temperature range: ${Math.min(...forecast.data.map((d: any) => Math.round(d.tempMin)))}°C 
+                 to ${Math.max(...forecast.data.map((d: any) => Math.round(d.tempMax)))}°C.
+               ${selectedPeriod === 'daily' ? 'Plan outdoor activities during cooler periods.' :
+                selectedPeriod === 'weekly' ? 'Consider seasonal clothing adjustments.' :
+                  selectedPeriod === 'monthly' ? 'Monitor long-term climate patterns.' :
+                    'Long-term climate trends for planning.'}`
               ) : (
-                "Forecast data is being processed."
+              "Forecast data is being processed."
               )}
             </p>
             {forecast.confidence && (
