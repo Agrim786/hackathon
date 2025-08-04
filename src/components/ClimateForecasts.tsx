@@ -30,7 +30,7 @@ export function ClimateForecasts({ latitude, longitude }: ClimateForecastsProps)
     { value: 'daily', label: 'Daily' },
     { value: 'weekly', label: 'Weekly' },
     { value: 'monthly', label: 'Monthly' },
-    { value: 'yearly', label: '5-Year' },
+    { value: 'yearly', label: 'Yearly' },
   ];
 
   const formatChartData = (data: any[]) => {
@@ -141,7 +141,7 @@ export function ClimateForecasts({ latitude, longitude }: ClimateForecastsProps)
               {selectedPeriod === 'daily' ? 'Next 7 Days' :
                 selectedPeriod === 'weekly' ? 'Next 4 Weeks' :
                   selectedPeriod === 'monthly' ? 'Next 3 Months' :
-                    'Next 5 Years'}
+                    'Years'}
             </h4>
             <p className="text-sm text-gray-600">
               {forecast.data && forecast.data.length > 0 ? (
