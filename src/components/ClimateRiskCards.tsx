@@ -104,8 +104,8 @@ export function ClimateRiskCards({ latitude, longitude }: ClimateRiskCardsProps)
   const cards = [
     {
       title: "Temperature",
-      value: `${weather?.temperature ?? 0}°F`, // ✅ fixed: should display temperature
-      subtitle: `Feels like ${weather?.feelsLike ?? 0}°F`,
+      value: `${weather?.temperature ?? 0}°C`, // ✅ fixed: should display temperature
+      subtitle: `Feels like ${weather?.feelsLike ?? 0}°C`,
       risk: risks?.temperature?.risk ?? "low",
       description: risks?.temperature?.description ?? "",
       icon: Thermometer,
