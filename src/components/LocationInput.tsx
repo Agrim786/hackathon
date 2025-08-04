@@ -25,7 +25,7 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const suggestionTimeoutRef = useRef<NodeJS.Timeout>();
   const { toast } = useToast();
-  const navigate = useNavigate();
+  
 
   const { data: autoLocation, refetch: detectLocation, isLoading: isDetecting } = useQuery({
     queryKey: ["/api/location"],
@@ -123,7 +123,6 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
       description: `Location set to ${suggestion.display}`,
     });
   };
-  
 
   const handleAutoDetect = async () => {
     if (navigator.geolocation) {
