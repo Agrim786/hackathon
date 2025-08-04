@@ -126,28 +126,14 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
           const response = await fetch(`${import.meta.env.VITE_URL}/api/location?lat=${latitude}&lon=${longitude}`);
           const data = await response.json();
   
-          if (data && data.city) {
-            setInputValue(`${data.city}, ${data.country}`);
-            setDetectedLocation(`${data.city}, ${data.country}`);
+          if (data && (data.city || data.country)) {  // allow detection even if only country exists
+            setInputValue(`${data.city || data.region || 'Unknown'}, ${data.country}`);
+            setDetectedLocation(`${data.city || data.region || 'Unknown'}, ${data.country}`);
             onLocationChange(data);
-            toast({
-              title: "Location detected",
-              description: `Detected: ${data.city}, ${data.country}`,
-            });
+            toast({ title: "Location detected", description: `Detected: ${data.city || data.region || 'Unknown'}, ${data.country}` });
           } else {
-            toast({
-              title: "Detection failed",
-              description: "Could not detect your location via API.",
-              variant: "destructive",
-            });
+            toast({ title: "Detection failed", description: "Could not detect your location via API.", variant: "destructive" });
           }
-        },
-        () => {
-          toast({
-            title: "Permission denied",
-            description: "Please allow location access or enter manually.",
-            variant: "destructive",
-          });
         }
       );
     } else {
