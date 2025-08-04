@@ -96,7 +96,7 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
           <Label className="block text-sm font-medium text-gray-700 mb-2">
             Temperature Adjustment: 
             <span className="text-primary font-semibold ml-1" data-testid="text-temperature-value">
-              {temperatureChange[0] > 0 ? '+' : ''}{temperatureChange[0]}°F
+              {temperatureChange[0] > 0 ? '+' : ''}{temperatureChange[0]}°C
             </span>
           </Label>
           <Slider
@@ -109,9 +109,9 @@ export function ClimateSimulator({ profile, latitude, longitude }: ClimateSimula
             data-testid="slider-temperature"
           />
           <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>-20°F</span>
+            <span>-20°C</span>
             <span>Current</span>
-            <span>+20°F</span>
+            <span>+20°C</span>
           </div>
         </div>
 
