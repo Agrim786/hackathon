@@ -22,22 +22,26 @@ type LocationData = {
 
 export default function Forecast() {
     const [forecastPeriod, setForecastPeriod] = useState<'daily' | 'weekly' | 'monthly' | 'yearly'>('daily');
+    const storedLocation = localStorage.getItem("selectedLocation");
+    const parsedLocation = storedLocation ? JSON.parse(storedLocation) : null;
 
     // Get user location
-    const { data: location = { city: '', region: '', country: '', latitude: 0, longitude: 0, timezone: '' } }
-        = useQuery<LocationData>({
-            queryKey: ['/api/location'],
-            queryFn: async () => {
-                const coords = await new Promise<GeolocationPosition>((resolve, reject) =>
-                  navigator.geolocation.getCurrentPosition(resolve, reject)
-                );
-              
-                const { latitude, longitude } = coords.coords;
-                const res = await fetch(`${import.meta.env.VITE_URL}/api/location?lat=${latitude}&lon=${longitude}`);
-                return res.json();
-              },              
-            staleTime: 30 * 60 * 1000, // 30 minutes
-        });
+    const { data: location = parsedLocation || { city: '', region: '', country: '', latitude: 0, longitude: 0, timezone: '' } }
+    = useQuery<LocationData>({
+      queryKey: ['/api/location', parsedLocation?.latitude, parsedLocation?.longitude],
+      queryFn: async () => {
+        if (parsedLocation) return parsedLocation; // use stored city if available
+  
+        const coords = await new Promise<GeolocationPosition>((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject)
+        );
+  
+        const { latitude, longitude } = coords.coords;
+        const res = await fetch(`${import.meta.env.VITE_URL}/api/location?lat=${latitude}&lon=${longitude}`);
+        return res.json();
+      },
+      staleTime: 30 * 60 * 1000,
+    });
 
 
     return (

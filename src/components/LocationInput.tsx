@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+
 
 interface LocationInputProps {
   onLocationChange: (location: {
@@ -23,6 +25,7 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const suggestionTimeoutRef = useRef<NodeJS.Timeout>();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const { data: autoLocation, refetch: detectLocation, isLoading: isDetecting } = useQuery({
     queryKey: ["/api/location"],
@@ -105,18 +108,22 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
       latitude: suggestion.lat,
       longitude: suggestion.lon,
     };
-    
+  
     setInputValue(suggestion.display);
     setDetectedLocation(suggestion.display);
     setShowSuggestions(false);
     setSuggestions([]);
     onLocationChange(location);
-    
+  
+    // Save silently to localStorage
+    localStorage.setItem("selectedLocation", JSON.stringify(location));
+  
     toast({
       title: "Location selected",
       description: `Location set to ${suggestion.display}`,
     });
   };
+  
 
   const handleAutoDetect = async () => {
     if (navigator.geolocation) {
