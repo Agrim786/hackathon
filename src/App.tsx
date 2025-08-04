@@ -12,14 +12,17 @@ import ScrollToTop from "./components/ScrollToTop";
 
 function Routes() {
   return (
-    <Switch>
-      <Route path="/" component={Dashboard} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/about" component={About} />
-      <Route path="/contact" component={Contact} />
-      <Route path="/privacy" component={Privacy} />
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <ScrollToTop /> 
+      <Switch>
+        <Route path="/" component={Dashboard} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/about" component={About} />
+        <Route path="/contact" component={Contact} />
+        <Route path="/privacy" component={Privacy} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
   );
 }
 
@@ -29,7 +32,6 @@ function App() {
       <TooltipProvider>
         <WouterRouter>
           <Toaster />
-          <ScrollToTop />
           <Routes />
         </WouterRouter>
       </TooltipProvider>
