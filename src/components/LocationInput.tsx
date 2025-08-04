@@ -119,28 +119,55 @@ export function LocationInput({ onLocationChange }: LocationInputProps) {
   };
 
   const handleAutoDetect = async () => {
-    try {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(`${import.meta.env.VITE_URL}/api/location?lat=${latitude}&lon=${longitude}`);
+          const data = await response.json();
+  
+          if (data && data.city) {
+            setInputValue(`${data.city}, ${data.country}`);
+            setDetectedLocation(`${data.city}, ${data.country}`);
+            onLocationChange(data);
+            toast({
+              title: "Location detected",
+              description: `Detected: ${data.city}, ${data.country}`,
+            });
+          } else {
+            toast({
+              title: "Detection failed",
+              description: "Could not detect your location via API.",
+              variant: "destructive",
+            });
+          }
+        },
+        () => {
+          toast({
+            title: "Permission denied",
+            description: "Please allow location access or enter manually.",
+            variant: "destructive",
+          });
+        }
+      );
+    } else {
+      // fallback to IP detection
       const result = await detectLocation();
       if (result.data && result.data.city) {
         toast({
-          title: "Location detected",
+          title: "Location detected (IP)",
           description: `Detected: ${result.data.city}, ${result.data.country}`,
         });
       } else {
         toast({
           title: "Detection failed",
-          description: "Could not detect your location. Please enter it manually.",
+          description: "Could not detect location.",
           variant: "destructive",
         });
       }
-    } catch {
-      toast({
-        title: "Detection failed",
-        description: "Could not detect your location. Please enter it manually.",
-        variant: "destructive",
-      });
     }
   };
+  
   
 
   const handleManualSearch = async () => {
