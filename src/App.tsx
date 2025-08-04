@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Router as WouterRouter, Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -10,9 +10,7 @@ import Privacy from "@/pages/privacy";
 import NotFound from "@/pages/not-found";
 import ScrollToTop from "./components/ScrollToTop";
 
-
-function Router() {
-  console.log("Backend URL:", import.meta.env.VITE_URL);
+function Routes() {
   return (
     <Switch>
       <Route path="/" component={Dashboard} />
@@ -29,9 +27,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <ScrollToTop />
-        <Router />
+        <WouterRouter>
+          <Toaster />
+          <ScrollToTop />
+          <Routes />
+        </WouterRouter>
       </TooltipProvider>
     </QueryClientProvider>
   );
