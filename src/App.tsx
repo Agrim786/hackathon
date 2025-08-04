@@ -8,7 +8,9 @@ import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Privacy from "@/pages/privacy";
 import NotFound from "@/pages/not-found";
+import Forecast
 
+from "./pages/forecast";
 function Router() {
   console.log("Backend URL:", import.meta.env.VITE_URL);
   return (
@@ -18,6 +20,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/privacy" component={Privacy} />
+      <Route path="/forecast" component={Forecast} />
       <Route component={NotFound} />
     </Switch>
   );
