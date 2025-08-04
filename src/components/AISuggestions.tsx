@@ -134,17 +134,6 @@ export function AISuggestions({ profile, latitude, longitude }: AISuggestionsPro
             <Brain className="text-primary text-xl" />
             <span className="text-lg font-semibold text-gray-900">AI Climate Suggestions</span>
           </CardTitle>
-          <Button
-            onClick={handleRefresh}
-            disabled={refreshing || isLoading}
-            variant="outline"
-            size="sm"
-            className="text-sm"
-            data-testid="button-refresh-suggestions"
-          >
-            <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
         </div>
       </CardHeader>
       <CardContent>
